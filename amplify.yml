@@ -1,21 +1,21 @@
 version: 1
 applications:
-  -appRoot: focal
-  frontend:
-    phases:
-      preBuild:
-        commands:
-          - cd focal
-          - npm ci
-      build:
-        commands:
-          # - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID # Deploys Backend
-          - npm run build           
-    artifacts:
-      baseDirectory: focal/.next  
-      files:
-        - '**/*'
-    cache:
-      paths:
-        - focal/node_modules/**/*
-        - focal/.next/cache/**/*
+  - appRoot: focal
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - cd focal
+            - npm ci
+        build:
+          commands:
+            # - npx ampx pipeline-deploy --branch $AWS_BRANCH --app-id $AWS_APP_ID # Deploys Backend
+            - npm run build           
+      artifacts:
+        baseDirectory: focal/.next  
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - focal/node_modules/**/*
+          - focal/.next/cache/**/*
