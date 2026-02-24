@@ -17,9 +17,7 @@ const nextConfig: NextConfig = {
           as: '*.js',
         },
       },
-    },
-    output: "export"
-  
+    },  
 };
 
 export default nextConfig;
