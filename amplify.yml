@@ -5,7 +5,6 @@ applications:
       phases:
         preBuild:
           commands:
-            - cd focal
             - npm ci
         build:
           commands:
