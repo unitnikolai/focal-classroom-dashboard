@@ -21,6 +21,7 @@
     "@tailwindcss/postcss": "^4.1.17",
     "apexcharts": "^4.7.0",
     "autoprefixer": "^10.4.22",
+    "aws-amplify": "^6.16.2",
     "flatpickr": "^4.6.13",
     "next": "^16.1.6",
     "react": "^19.2.0",
@@ -33,16 +34,22 @@
     "tailwind-merge": "^2.6.0"
   },
   "devDependencies": {
+    "@aws-amplify/backend": "^1.21.0",
+    "@aws-amplify/backend-cli": "^1.8.2",
     "@eslint/eslintrc": "^0.1.0",
     "@svgr/webpack": "^8.1.0",
     "@types/node": "^20.19.25",
     "@types/react": "^19.2.1",
     "@types/react-dom": "^19.2.1",
     "@types/react-transition-group": "^4.4.12",
+    "aws-cdk-lib": "^2.234.1",
+    "constructs": "^10.5.1",
+    "esbuild": "^0.27.3",
     "eslint": "^10.0.1",
     "eslint-config-next": "^0.2.4",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.17",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   },
   "overrides": {

@@ -5,11 +5,42 @@ import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
+import { signIn, signInWithRedirect } from "aws-amplify/auth";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function SignInForm() {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  async function handleSignin(e: React.FormEvent){
+    if (!email || !password) return;
+    
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
+    
+    try {
+      await signIn({
+        username: email,
+        password: password,
+        options: {
+          authFlowType: 'USER_SRP_AUTH'
+        }
+      });
+      
+      // Redirect to dashboard on successful login
+      router.push('/');
+    } catch (err: any) {
+      setError(err.message || 'Failed to sign in. Please check your credentials.');
+      setIsLoading(false);
+    }
+  }
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
@@ -84,13 +115,23 @@ export default function SignInForm() {
                 </span>
               </div>
             </div>
-            <form>
+            <form onSubmit={handleSignin}>
               <div className="space-y-6">
+                {error && (
+                  <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                    <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
+                  </div>
+                )}
                 <div>
                   <Label>
                     Email <span className="text-error-500">*</span>{" "}
                   </Label>
-                  <Input placeholder="info@gmail.com" type="email" />
+                  <Input 
+                    placeholder="info@gmail.com" 
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
                 <div>
                   <Label>
@@ -100,6 +141,8 @@ export default function SignInForm() {
                     <Input
                       type={showPassword ? "text" : "password"}
                       placeholder="Enter your password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -128,8 +171,12 @@ export default function SignInForm() {
                   </Link>
                 </div>
                 <div>
-                  <Button className="w-full" size="sm">
-                    Sign in
+                  <Button 
+                    className="w-full" 
+                    size="sm"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? 'Signing in...' : 'Sign in'}
                   </Button>
                 </div>
               </div>

@@ -1,14 +1,83 @@
 "use client";
+import { signUp, confirmSignUp } from "aws-amplify/auth"
 import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
+import Button from "@/components/ui/button/Button";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 export default function SignUpForm() {
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmationCode, setConfirmationCode] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [signUpStep, setSignUpStep] = useState<"signup" | "confirm">("signup");
+  const router = useRouter();
+
+  const handleSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+
+    if (!isChecked) {
+      setError("You must agree to the Terms and Conditions");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const { isSignUpComplete, userId, nextStep } = await signUp({
+        username: email,
+        password,
+        options: {
+          userAttributes: {
+            email,
+            given_name: firstName,
+            family_name: lastName,
+          },
+        },
+      });
+
+      // Check if email confirmation is needed
+      if (nextStep?.signUpStep === "CONFIRM_SIGN_UP") {
+        setSignUpStep("confirm");
+      } else if (isSignUpComplete) {
+        // Auto-confirmed, redirect to sign in
+        router.push("/signin");
+      }
+    } catch (err: any) {
+      setError(err.message || "Failed to sign up");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleConfirmSignUp = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setLoading(true);
+
+    try {
+      await confirmSignUp({
+        username: email,
+        confirmationCode,
+      });
+      // After confirmation, redirect to sign in
+      router.push("/signin");
+    } catch (err: any) {
+      setError(err.message || "Failed to confirm email");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full overflow-y-auto no-scrollbar">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
@@ -83,8 +152,14 @@ export default function SignUpForm() {
                 </span>
               </div>
             </div>
-            <form>
+            {signUpStep === "signup" ? (
+            <form onSubmit={handleSignUp}>
               <div className="space-y-5">
+                {error && (
+                  <div className="p-3 rounded-lg bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/20">
+                    <p className="text-sm text-error-600 dark:text-error-400">{error}</p>
+                  </div>
+                )}
                 <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                   {/* <!-- First Name --> */}
                   <div className="sm:col-span-1">
@@ -96,6 +171,9 @@ export default function SignUpForm() {
                       id="fname"
                       name="fname"
                       placeholder="Enter your first name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
+                      required
                     />
                   </div>
                   {/* <!-- Last Name --> */}
@@ -108,6 +186,9 @@ export default function SignUpForm() {
                       id="lname"
                       name="lname"
                       placeholder="Enter your last name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      required
                     />
                   </div>
                 </div>
@@ -121,6 +202,9 @@ export default function SignUpForm() {
                     id="email"
                     name="email"
                     placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
                   />
                 </div>
                 {/* <!-- Password --> */}
@@ -132,6 +216,9 @@ export default function SignUpForm() {
                     <Input
                       placeholder="Enter your password"
                       type={showPassword ? "text" : "password"}
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
                     />
                     <span
                       onClick={() => setShowPassword(!showPassword)}
@@ -165,12 +252,59 @@ export default function SignUpForm() {
                 </div>
                 {/* <!-- Button --> */}
                 <div>
-                  <button className="flex items-center justify-center w-full px-4 py-3 text-sm font-medium text-white transition rounded-lg bg-brand-500 shadow-theme-xs hover:bg-brand-600">
-                    Sign Up
-                  </button>
+                  <Button
+                    className="w-full"
+                    size="sm"
+                    disabled={loading}
+                  >
+                    {loading ? "Creating account..." : "Sign Up"}
+                  </Button>
                 </div>
               </div>
             </form>
+            ) : (
+            <form onSubmit={handleConfirmSignUp}>
+              <div className="space-y-5">
+                <div>
+                  <h2 className="mb-3 font-semibold text-gray-800 dark:text-white/90">Verify Your Email</h2>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-5">We sent a confirmation code to {email}</p>
+                </div>
+                {error && (
+                  <div className="p-3 rounded-lg bg-error-50 dark:bg-error-500/10 border border-error-200 dark:border-error-500/20">
+                    <p className="text-sm text-error-600 dark:text-error-400">{error}</p>
+                  </div>
+                )}
+                <div>
+                  <Label>
+                    Confirmation Code<span className="text-error-500">*</span>
+                  </Label>
+                  <Input
+                    type="text"
+                    placeholder="Enter the 6-digit code"
+                    value={confirmationCode}
+                    onChange={(e) => setConfirmationCode(e.target.value)}
+                    required
+                  />
+                </div>
+                <div>
+                  <Button
+                    className="w-full"
+                    size="sm"
+                    disabled={loading}
+                  >
+                    {loading ? "Verifying..." : "Verify Email"}
+                  </Button>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setSignUpStep("signup")}
+                  className="w-full text-sm text-brand-500 hover:text-brand-600 dark:text-brand-400"
+                >
+                  Back to sign up
+                </button>
+              </div>
+            </form>
+            )}
 
             <div className="mt-5">
               <p className="text-sm font-normal text-center text-gray-700 dark:text-gray-400 sm:text-start">
