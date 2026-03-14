@@ -7,8 +7,8 @@ const awsAmplifyConfig = {
   Auth: {
     Cognito: {
       region: 'us-east-2',
-      userPoolId: 'us-east-2_6VhkFmvxY',
-      userPoolClientId: '5a1b9i7tdbp8a23jtbihugp39a',
+      userPoolId: 'us-east-2_enXp5KADX',
+      userPoolClientId: '2qnnauihtehjeifiif9a1qqjmn',
       loginWith: {
         email: true
       }
