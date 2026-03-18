@@ -21,6 +21,7 @@ const cookieStorage = new CookieStorage({
   secure: true,
   sameSite: 'strict',
   path: '/',
+  expires: 365,
 });
 
 Amplify.configure(awsAmplifyConfig);

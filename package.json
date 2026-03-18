@@ -17,5 +17,8 @@
   "bugs": {
     "url": "https://github.com/unitnikolai/focal-classroom-dashboard/issues"
   },
-  "homepage": "https://github.com/unitnikolai/focal-classroom-dashboard#readme"
+  "homepage": "https://github.com/unitnikolai/focal-classroom-dashboard#readme",
+  "dependencies": {
+    "@aws-amplify/adapter-nextjs": "^1.7.2"
+  }
 }
