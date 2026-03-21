@@ -1,7 +1,5 @@
 "use client";
 import { Amplify } from 'aws-amplify';
-import { CookieStorage } from 'aws-amplify/utils';
-import { cognitoUserPoolsTokenProvider } from 'aws-amplify/auth/cognito';
 
 const awsAmplifyConfig = {
   Auth: {
@@ -10,21 +8,17 @@ const awsAmplifyConfig = {
       userPoolId: 'us-east-2_enXp5KADX',
       userPoolClientId: '2qnnauihtehjeifiif9a1qqjmn',
       loginWith: {
-        email: true
+        email: true,
+        oauth: {
+          domain: "focal-auth-portal.auth.us-east-2.amazoncognito.com",
+          scopes: [ 'openid', 'email' ],
+          redirectSignIn: ["https://4acmiz12d4.execute-api.us-east-2.amazonaws.com/oauth2/callback", "http://localhost:3000"],
+          redirectSignOut: ["https://main.deu6lm3uucumx.amplifyapp.com/signin", "http://localhost:3000"],
+          responseType: 'code' as const,
+        }
       }
     }
   }
 }
-
-// Configure secure cookie storage for JWT tokens
-const cookieStorage = new CookieStorage({
-  secure: true,
-  sameSite: 'strict',
-  path: '/',
-  expires: 365,
-});
-
 Amplify.configure(awsAmplifyConfig);
-cognitoUserPoolsTokenProvider.setKeyValueStorage(cookieStorage);
-
 export default awsAmplifyConfig;
