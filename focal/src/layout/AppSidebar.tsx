@@ -7,6 +7,7 @@ import { useSidebar } from "../context/SidebarContext";
 import {
   GridIcon,
   HorizontaLDots,
+  UserIcon,
 } from "../icons/index";
 
 type NavItem = {
@@ -20,6 +21,11 @@ const navItems: NavItem[] = [
     icon: <GridIcon />,
     name: "Dashboard",
     path: "/",
+  },
+  {
+    icon: <UserIcon />,
+    name: "Profile",
+    path: "/profile",
   },
 ];
 

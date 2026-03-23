@@ -30,7 +30,7 @@ export default function AuthLayout({
                   />
                 </Link>
                 <p className="text-center text-gray-400 dark:text-white/60">
-                  Focal Classroom - Retain focus, enhance learning, ensure success.
+                  Focal Organization - Retain focus, enhance learning, ensure success.
                 </p>
               </div>
             </div>
