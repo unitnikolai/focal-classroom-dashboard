@@ -1,37 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { NextMiddlewareResult } from 'next/dist/server/web/types';
 
-export async function middleware(request: NextRequest): Promise<NextMiddlewareResult> {
-  const pathname = request.nextUrl.pathname;
+const PUBLIC_PATHS = ['/signin', '/signup', '/api/auth'];
 
-  // Check if accessing protected admin routes
-  if (pathname.startsWith('/') || pathname.startsWith('/api/protected')) {
-    // Check for authentication token in cookies
-    const authToken = request.cookies.get('amplifyAuthenticatedUser');
-    const accessToken = request.cookies.get('CognitoIdentityServiceProvider.YOUR_APP_CLIENT_ID.accessToken');
-    
-    // If no token, redirect to signin
-    if (!authToken && !accessToken) {
-      const signinUrl = new URL('/signin', request.url);
-      return NextResponse.redirect(signinUrl);
-    }
-  }
+export function middleware(req: NextRequest) {
+  const { pathname } = req.nextUrl;
 
-  // Allow public access to signin/signup and other full-width pages
-  if (pathname.startsWith('/signin') || pathname.startsWith('/signup')) {
+  // Let public paths through unconditionally
+  if (PUBLIC_PATHS.some(p => pathname.startsWith(p))) {
     return NextResponse.next();
   }
 
+  const accessToken = req.cookies.get('accessToken')?.value;
+  const refreshToken = req.cookies.get('refreshToken')?.value;
+
+  // No tokens at all → hard redirect to signin
+  if (!accessToken && !refreshToken) {
+    return NextResponse.redirect(new URL('/signin', req.url));
+  }
+
+  // Has a refresh token but access token is missing/expired →
+  // let the request through, AuthGuard will handle the refresh client-side
   return NextResponse.next();
 }
 
-// Specify which routes to apply middleware to
 export const config = {
-  matcher: [
-    // Protect admin routes
-    '/admin/:path*',
-    // Protect API routes (optional)
-    '/api/protected/:path*',
-    // Don't apply to auth routes, static files, etc.
-  ],
+  matcher: ['/((?!_next/static|_next/image|favicon.ico).*)'],
 };
