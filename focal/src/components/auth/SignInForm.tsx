@@ -5,9 +5,9 @@ import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
 import Link from "next/link";
-import { signIn, signInWithRedirect } from "aws-amplify/auth";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import {apiFetch } from "@/lib/auth-client";
 
 export default function SignInForm() {
   const router = useRouter();
@@ -18,29 +18,31 @@ export default function SignInForm() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  async function handleSignin(e: React.FormEvent){
-    if (!email || !password) return;
-    
-    e.preventDefault();
-    setError("");
-    setIsLoading(true);
-    
-    try {
-      await signIn({
-        username: email,
-        password: password,
-        options: {
-          authFlowType: 'USER_SRP_AUTH'
-        }
-      });
-      
-      // Redirect to dashboard on successful login
-      router.push('/');
-    } catch (err: any) {
-      setError(err.message || 'Failed to sign in. Please check your credentials.');
-      setIsLoading(false);
+
+async function handleSignin(e: React.FormEvent) {
+  e.preventDefault();
+  if (!email || !password) return;
+  setError("");
+  setIsLoading(true);
+
+  try {
+    const res = await apiFetch("/api/auth/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error ?? "Failed to sign in");
     }
+
+    router.push('/');
+  } catch (err: any) {
+    setError(err.message || 'Failed to sign in. Please check your credentials.');
+    setIsLoading(false);
   }
+}
   return (
     <div className="flex flex-col flex-1 lg:w-1/2 w-full">
       <div className="w-full max-w-md sm:pt-10 mx-auto mb-5">
