@@ -7,6 +7,7 @@ import DeviceGrid from "./DeviceGrid";
 import BlockControls from "./BlockControls";
 import AttendancePanel from "./AttendancePanel";
 import SessionInfo from "./SessionInfo";
+import { useProfile } from "@/hooks/useProfile";
 
 const INITIAL_BLOCK: GlobalBlock = {
   isActive:    true,
@@ -17,6 +18,7 @@ const INITIAL_BLOCK: GlobalBlock = {
 };
 
 export default function ClassroomDashboard() {
+  const { profile } = useProfile();
   const [students, setStudents] = useState<Student[]>(MOCK_STUDENTS);
   const [block, setBlock] = useState<GlobalBlock>(INITIAL_BLOCK);
 
@@ -42,7 +44,7 @@ export default function ClassroomDashboard() {
       <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-xl font-semibold text-gray-800 dark:text-white/90">
-            Good morning, Mr. Hassan
+            Good morning{profile ? `, ${profile.personalInfo.givenName}` : ''}
           </h2>
           <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
             Period 3 — Computer Science · {students.length} students enrolled

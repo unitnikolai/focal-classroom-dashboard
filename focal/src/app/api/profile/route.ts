@@ -1,96 +1,59 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyAuthCookie } from '@/lib/auth-server';
+import type { BackendUserProfile, ProfileApiResponse, UserProfile } from '@/types/profile';
+
+const LAMBDA_URL = 'https://4acmiz12d4.execute-api.us-east-2.amazonaws.com';
 
 /**
  * GET /api/profile
- * Fetch authenticated user's profile information
+ * Validates access token via auth-server, then fetches profile from backend Lambda.
  */
 export async function GET(req: NextRequest) {
   try {
-    const accessToken = req.cookies.get('accessToken')?.value;
+    // Validate the access token using the same Cognito verifier as /api/auth/check
+    const cookieHeader = req.headers.get('cookie');
+    const payload = await verifyAuthCookie(cookieHeader);
 
-    if (!accessToken) {
+    if (!payload) {
       return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
+        { success: false, error: 'Unauthorized' } satisfies ProfileApiResponse,
         { status: 401 }
       );
     }
 
-    // Example response structure - replace with actual call to Lambda/backend
-    const profileData = {
-      success: true,
-      data: {
-        id: 'user-123',
-        personalInfo: {
-          givenName: 'Musharof',
-          lastName: 'Chowdhury',
-          email: 'randomuser@pimjo.com',
-          organizationName: 'Focal Inc.',
-          avatarUrl: '/images/user/owner.jpg',
-        },
-        socialLinks: {
-          facebook: 'https://www.facebook.com/PimjoHQ',
-          twitter: 'https://twitter.com/PimjoHQ',
-          linkedin: 'https://linkedin.com/company/pimjo',
-          instagram: 'https://instagram.com/pimjohq',
-        },
-        stats: {
-          totalSessions: 142,
-          activeDevices: 3,
-          organizationsManaged: 5,
-          joinDate: '2023-01-15',
-          lastActive: new Date().toISOString(),
-        },
-        createdAt: '2023-01-15T10:30:00Z',
-        updatedAt: new Date().toISOString(),
+    // Forward cookies to the backend Lambda so the oAuth2Authorizer can validate
+    const backendRes = await fetch(`${LAMBDA_URL}/user/profile`, {
+      method: 'GET',
+      headers: {
+        cookie: cookieHeader ?? '',
+      },
+    });
+
+    if (!backendRes.ok) {
+      const body = await backendRes.json().catch(() => ({}));
+      return NextResponse.json(
+        { success: false, error: body.error ?? 'Backend error' } satisfies ProfileApiResponse,
+        { status: backendRes.status }
+      );
+    }
+
+    const backendData: BackendUserProfile = await backendRes.json();
+
+    const profileData: UserProfile = {
+      id: payload.sub,
+      personalInfo: {
+        givenName: backendData.given_name ?? '',
+        lastName: backendData.family_name ?? '',
+        email: backendData.email ?? '',
+        organizationId: backendData.organization_id ?? '',
       },
     };
 
-    return NextResponse.json(profileData);
+    return NextResponse.json({ success: true, data: profileData } satisfies ProfileApiResponse);
   } catch (error) {
     console.error('Profile fetch error:', error);
     return NextResponse.json(
-      { success: false, error: 'Failed to fetch profile' },
-      { status: 500 }
-    );
-  }
-}
-
-/**
- * PUT /api/profile
- * Update user's profile information
- */
-export async function PUT(req: NextRequest) {
-  try {
-    const accessToken = req.cookies.get('accessToken')?.value;
-
-    if (!accessToken) {
-      return NextResponse.json(
-        { success: false, error: 'Unauthorized' },
-        { status: 401 }
-      );
-    }
-
-    const updatedData = await req.json();
-
-    // Call your backend Lambda/API to update profile
-    // const response = await fetch(`${LAMBDA_URL}/user/profile`, {
-    //   method: 'PUT',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'Authorization': `Bearer ${accessToken}`,
-    //   },
-    //   body: JSON.stringify(updatedData),
-    // });
-
-    return NextResponse.json({
-      success: true,
-      message: 'Profile updated successfully',
-      data: updatedData,
-    });
-  } catch (error) {
-    console.error('Profile update error:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to update profile' },
+      { success: false, error: 'Failed to fetch profile' } satisfies ProfileApiResponse,
       { status: 500 }
     );
   }

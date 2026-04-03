@@ -5,14 +5,24 @@ import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
+import { UserProfile } from "@/types/profile";
 
-export default function UserInfoCard() {
+interface UserInfoCardProps {
+  profile: UserProfile | null;
+}
+
+export default function UserInfoCard({ profile }: UserInfoCardProps) {
   const { isOpen, openModal, closeModal } = useModal();
   const handleSave = () => {
     // Handle save logic here
     console.log("Saving changes...");
     closeModal();
   };
+
+  const firstName = profile?.personalInfo.givenName ?? '';
+  const lastName = profile?.personalInfo.lastName ?? '';
+  const email = profile?.personalInfo.email ?? '';
+
   return (
     <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -27,6 +37,7 @@ export default function UserInfoCard() {
                 First Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                {firstName}
               </p>
             </div>
 
@@ -35,6 +46,7 @@ export default function UserInfoCard() {
                 Last Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                {lastName}
               </p>
             </div>
 
@@ -43,22 +55,16 @@ export default function UserInfoCard() {
                 Email address
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                {email}
               </p>
             </div>
 
             <div>
               <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Phone
+                Organization
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-              </p>
-            </div>
-
-            <div>
-              <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-                Bio
-              </p>
-              <p className="text-sm font-medium text-gray-800 dark:text-white/90">
+                {profile?.personalInfo.organizationId ?? ''}
               </p>
             </div>
           </div>
