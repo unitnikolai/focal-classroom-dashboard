@@ -1,4 +1,4 @@
-import { Student } from "./types";
+import { Student, Group } from "./types";
 
 const now = new Date();
 const minsAgo = (m: number) => new Date(now.getTime() - m * 60000).toISOString();
@@ -26,4 +26,11 @@ export const MOCK_STUDENTS: Student[] = [
   { id: "20", name: "Daniel Park",      deviceName: "Unknown device", deviceStatus: "unactivated", attendanceStatus: "absent",  joinTime: undefined,   statusSince: undefined },
   { id: "21", name: "Isla Murray",      deviceName: "Unknown device", deviceStatus: "unactivated", attendanceStatus: "absent",  joinTime: undefined,   statusSince: undefined },
   { id: "22", name: "Ryan Walsh",       deviceName: "Unknown device", deviceStatus: "unactivated", attendanceStatus: "absent",  joinTime: undefined,   statusSince: undefined },
+];
+
+export const MOCK_GROUPS: Group[] = [
+  { id: "g1", name: "Period 1 — English",          memberIds: ["1", "2", "3", "4", "5", "6", "7"] },
+  { id: "g2", name: "Period 2 — Mathematics",      memberIds: ["3", "5", "8", "9", "10", "11", "12"] },
+  { id: "g3", name: "Period 3 — Computer Science",  memberIds: ["1", "4", "6", "7", "13", "14", "15", "16", "17", "18"] },
+  { id: "g4", name: "Period 4 — Biology",           memberIds: ["2", "8", "9", "11", "19", "20", "21", "22"] },
 ];

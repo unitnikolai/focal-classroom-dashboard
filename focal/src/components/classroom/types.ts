@@ -29,3 +29,9 @@ export interface GlobalBlock {
   messaging: boolean;
   browsers: boolean;
 }
+
+export interface Group {
+  id: string;
+  name: string;
+  memberIds: string[];
+}
