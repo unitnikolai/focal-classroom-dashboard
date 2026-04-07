@@ -98,7 +98,7 @@ export default function BlockControls({ block, onToggle, onEndBlock }: BlockCont
         disabled={!block.isActive}
         className="mt-5 w-full rounded-xl border border-error-200 bg-error-50 px-4 py-2.5 text-sm font-medium text-error-600 transition hover:bg-error-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-error-500/30 dark:bg-error-500/10 dark:text-error-400 dark:hover:bg-error-500/20"
       >
-        End block for all students
+        End block for all employees
       </button>
     </div>
   );

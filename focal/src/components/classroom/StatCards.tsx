@@ -18,7 +18,7 @@ export default function StatCards({ students }: StatCardsProps) {
     {
       label: "Present",
       value: present,
-      sub: `of ${students.length} students`,
+      sub: `of ${students.length} employees`,
       dotColor: "bg-success-500",
       textColor: "text-success-600 dark:text-success-400",
     },

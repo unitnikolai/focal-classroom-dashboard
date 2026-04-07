@@ -97,7 +97,7 @@ export default function DeviceGrid({ students, onUpdateExemption }: DeviceGridPr
               Device status
             </h3>
             <p className="mt-0.5 text-sm text-gray-500 dark:text-gray-400">
-              Click &ldquo;Manage&rdquo; on any student to customize their block
+              Click &ldquo;Manage&rdquo; on any employee to customize their block
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -164,7 +164,7 @@ export default function DeviceGrid({ students, onUpdateExemption }: DeviceGridPr
 
         {filtered.length === 0 && (
           <div className="py-10 text-center text-sm text-gray-400 dark:text-gray-500">
-            No students match this filter.
+            No employees match this filter.
           </div>
         )}
       </div>

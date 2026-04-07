@@ -43,7 +43,7 @@ export default function SessionInfo({ className: cls, period, startTime, enrolle
     { label: "Period",   value: period               },
     { label: "Started",  value: startTime            },
     { label: "Duration", value: elapsed              },
-    { label: "Enrolled", value: `${enrolled} students` },
+    { label: "Enrolled", value: `${enrolled} employees` },
   ];
 
   return (

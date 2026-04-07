@@ -74,7 +74,7 @@ export default function ManageStudentModal({
       </div>
 
       <p className="mb-4 text-xs text-gray-400 dark:text-gray-500 uppercase tracking-wide font-medium">
-        Lift restrictions for this student
+        Lift restrictions for this employee
       </p>
 
       <div className="space-y-1">
@@ -109,7 +109,7 @@ export default function ManageStudentModal({
 
       {anyUnblocked && (
         <p className="mt-3 text-xs text-warning-600 dark:text-warning-400 bg-warning-50 dark:bg-warning-500/10 rounded-lg px-3 py-2">
-          Turning on a toggle lifts that restriction for this student only.
+          Turning on a toggle lifts that restriction for this employee only.
         </p>
       )}
 

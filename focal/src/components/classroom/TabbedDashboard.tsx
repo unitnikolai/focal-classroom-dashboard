@@ -3,7 +3,6 @@ import React, { useState, useCallback } from "react";
 import { Student } from "./types";
 import { MOCK_STUDENTS } from "./data";
 import DeviceList from "./DeviceList";
-import ClassroomDashboard from "./ClassroomDashboard";
 import StatCards from "./StatCards";
 
 const TABS = [
@@ -56,7 +55,6 @@ export default function TabbedDashboard() {
       {activeTab === "devices" && (
         <DeviceList students={students} onUnblock={handleUnblock} />
       )}
-      {activeTab === "classroom" && <ClassroomDashboard />}
     </div>
   );
 }

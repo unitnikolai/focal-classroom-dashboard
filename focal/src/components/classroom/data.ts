@@ -29,8 +29,8 @@ export const MOCK_STUDENTS: Student[] = [
 ];
 
 export const MOCK_GROUPS: Group[] = [
-  { id: "g1", name: "Period 1 — English",          memberIds: ["1", "2", "3", "4", "5", "6", "7"] },
-  { id: "g2", name: "Period 2 — Mathematics",      memberIds: ["3", "5", "8", "9", "10", "11", "12"] },
-  { id: "g3", name: "Period 3 — Computer Science",  memberIds: ["1", "4", "6", "7", "13", "14", "15", "16", "17", "18"] },
-  { id: "g4", name: "Period 4 — Biology",           memberIds: ["2", "8", "9", "11", "19", "20", "21", "22"] },
+  { id: "g1", name: "04:00-12:00 Shift 1",          memberIds: ["1", "2", "3", "4", "5", "6", "7"] },
+  { id: "g2", name: "06:00-14:00 Shift 2",      memberIds: ["3", "5", "8", "9", "10", "11", "12"] },
+  { id: "g3", name: "09:00-17:00 Shift 3",  memberIds: ["1", "4", "6", "7", "13", "14", "15", "16", "17", "18"] },
+  { id: "g4", name: "10:00-18:00 Shift 4",           memberIds: ["2", "8", "9", "11", "19", "20", "21", "22"] },
 ];
