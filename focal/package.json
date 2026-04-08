@@ -24,6 +24,7 @@
     "autoprefixer": "^10.4.22",
     "aws-amplify": "^6.16.3",
     "flatpickr": "^4.6.13",
+    "lightningcss": "^1.32.0",
     "next": "^16.1.6",
     "react": "^19.2.0",
     "react-apexcharts": "^1.8.0",
