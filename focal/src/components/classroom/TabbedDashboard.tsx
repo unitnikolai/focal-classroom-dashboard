@@ -7,7 +7,6 @@ import StatCards from "./StatCards";
 
 const TABS = [
   { key: "devices", label: "Devices" },
-  { key: "classroom", label: "Classroom" },
 ] as const;
 
 type TabKey = (typeof TABS)[number]["key"];
