@@ -22,7 +22,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Forward cookies to the backend Lambda so the oAuth2Authorizer can validate
-    const backendRes = await fetch(`${LAMBDA_URL}/user/profile`, {
+    const backendRes = await fetch(`${LAMBDA_URL}/api/profile`, {
       method: 'GET',
       headers: {
         cookie: cookieHeader ?? '',

@@ -110,12 +110,24 @@ const AppSidebar: React.FC = () => {
               />
             </>
           ) : (
-            <Image
-              src="/images/logo/focal-icon.svg"
-              alt="Logo"
-              width={32}
-              height={32}
-            />
+            <>
+              <Image
+                className="dark:hidden"
+                src="/images/logo/focal.svg"
+                alt="Logo"
+                width={40}
+                height={40}
+                style={{ objectFit: "contain", maxWidth: "40px" }}
+              />
+              <Image
+                className="hidden dark:block"
+                src="/images/logo/focal-dark.svg"
+                alt="Logo"
+                width={40}
+                height={40}
+                style={{ objectFit: "contain", maxWidth: "40px" }}
+              />
+            </>
           )}
         </Link>
       </div>

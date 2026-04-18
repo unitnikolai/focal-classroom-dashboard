@@ -7,12 +7,16 @@ const LOGOUT_URI = "https://main.deu6lm3uucumx.amplifyapp.com/signin";
 
 
 export async function signOut() {
-  await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-  const params = new URLSearchParams({
-    client_id: CLIENT_ID,
-    logout_uri: LOGOUT_URI,
-  });
-  window.location.href = `https://${COGNITO_DOMAIN}/logout?${params}`;
+  try {
+    const response = await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    if (!response.ok) {
+      console.error("Logout request failed:", response.status);
+    }
+  } catch (error) {
+    console.error("Logout error:", error);
+  }
+  
+  window.location.href = "/signin";
 }
 
 export function isLoggedIn(): boolean {
