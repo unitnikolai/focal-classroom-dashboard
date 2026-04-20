@@ -8,6 +8,15 @@ interface DeviceListProps {
   onUnblock: (studentIds: string[]) => void;
 }
 
+function formatStatusSince(statusSince: string | undefined): string | null {
+  if (!statusSince) return null;
+  const diffMs = Date.now() - new Date(statusSince).getTime();
+  const diffMin = Math.floor(diffMs / 60000);
+  if (diffMin < 60) return `${diffMin}m`;
+  const date = new Date(statusSince);
+  return date.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", hour12: true });
+}
+
 function StatusDot({ status }: { status: Student["deviceStatus"] }) {
   const color =
     status === "active"
@@ -18,12 +27,13 @@ function StatusDot({ status }: { status: Student["deviceStatus"] }) {
   return <span className={`inline-block h-2 w-2 rounded-full ${color}`} />;
 }
 
-function StatusLabel({ status }: { status: Student["deviceStatus"] }) {
+function StatusLabel({ status, statusSince }: { status: Student["deviceStatus"]; statusSince?: string }) {
+  const sinceStr = formatStatusSince(statusSince);
   const label =
     status === "active"
-      ? "Active"
+      ? sinceStr ? `Active since ${sinceStr}` : "Active"
       : status === "inactive"
-      ? "Inactive"
+      ? sinceStr ? `Inactive since ${sinceStr}` : "Inactive"
       : "Not set up";
   const textColor =
     status === "active"
@@ -216,7 +226,7 @@ export default function DeviceList({ students, onUnblock }: DeviceListProps) {
               {/* Status */}
               <div className="flex items-center gap-1.5 min-w-[90px]">
                 <StatusDot status={student.deviceStatus} />
-                <StatusLabel status={student.deviceStatus} />
+                <StatusLabel status={student.deviceStatus} statusSince={student.statusSince} />
               </div>
 
               {/* Action */}

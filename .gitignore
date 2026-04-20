@@ -3,3 +3,4 @@ node_modules
 .lambda/auth/oAuth2Callback/node_modules
 .lambda/auth/auth-login/node_modules
 focal/package-lock.json
+focal/.env.example

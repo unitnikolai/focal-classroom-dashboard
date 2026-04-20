@@ -45,13 +45,13 @@ function StatusBadge({ student }: { student: Student }) {
   if (student.deviceStatus === "active")
     return (
       <span className="inline-flex items-center rounded-full bg-success-50 px-2 py-0.5 text-xs font-medium text-success-600 dark:bg-success-500/15 dark:text-success-400">
-        Active
+        Active{formatStatusSince(student.statusSince) ? ` since ${formatStatusSince(student.statusSince)}` : ""}
       </span>
     );
   if (student.deviceStatus === "inactive")
     return (
       <span className="inline-flex items-center rounded-full bg-warning-50 px-2 py-0.5 text-xs font-medium text-warning-600 dark:bg-warning-500/15 dark:text-orange-400">
-        Inactive
+        Inactive{formatStatusSince(student.statusSince) ? ` since ${formatStatusSince(student.statusSince)}` : ""}
       </span>
     );
   return (
@@ -153,11 +153,6 @@ export default function DeviceGrid({ students, onUpdateExemption }: DeviceGridPr
                   </button>
                 )}
               </div>
-              {student.deviceStatus !== "unactivated" && formatStatusSince(student.statusSince) && (
-                <p className="mt-1.5 text-xs text-gray-400 dark:text-gray-500">
-                  Since {formatStatusSince(student.statusSince)}
-                </p>
-              )}
             </div>
           ))}
         </div>

@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useCallback } from "react";
 import { Student } from "./types";
-import { MOCK_STUDENTS } from "./data";
+import { useSessions } from "@/hooks/useSessions";
 import DeviceList from "./DeviceList";
 import StatCards from "./StatCards";
 
@@ -13,7 +13,12 @@ type TabKey = (typeof TABS)[number]["key"];
 
 export default function TabbedDashboard() {
   const [activeTab, setActiveTab] = useState<TabKey>("devices");
-  const [students, setStudents] = useState<Student[]>(MOCK_STUDENTS);
+  const { sessions, loading, error } = useSessions(5000);
+  const [students, setStudents] = useState<Student[]>([]);
+
+  React.useEffect(() => {
+    setStudents(sessions);
+  }, [sessions]);
 
   const handleUnblock = useCallback((ids: string[]) => {
     const idSet = new Set(ids);
@@ -30,6 +35,13 @@ export default function TabbedDashboard() {
     <div className="space-y-6">
       {/* Stats */}
       <StatCards students={students} />
+
+      {loading && students.length === 0 && (
+        <p className="text-sm text-gray-500 dark:text-gray-400">Loading sessions…</p>
+      )}
+      {error && (
+        <p className="text-sm text-red-500">{error}</p>
+      )}
 
       {/* Tab bar */}
       <div className="border-b border-gray-200 dark:border-gray-800">
