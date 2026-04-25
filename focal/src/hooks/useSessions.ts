@@ -40,6 +40,7 @@ function mapSessionToStudent(session: RawSession): Student {
     attendanceStatus,
     joinTime,
     statusSince: session.status_since,
+    groupId: session.group_id || undefined,
   };
 }
 

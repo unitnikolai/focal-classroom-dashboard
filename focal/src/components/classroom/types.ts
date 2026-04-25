@@ -18,6 +18,7 @@ export interface Student {
   joinTime?: string;
   exemption?: StudentExemption;
   statusSince?: string;
+  groupId?: string;
 }
 
 export type DeviceFilter = "all" | "active" | "exempted" | "inactive" | "unactivated";
