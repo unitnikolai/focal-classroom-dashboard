@@ -1,5 +1,4 @@
 "use client";
-import { signUp, confirmSignUp } from "aws-amplify/auth"
 import Checkbox from "@/components/form/input/Checkbox";
 import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
@@ -34,24 +33,18 @@ export default function SignUpForm() {
     setLoading(true);
 
     try {
-      const { isSignUpComplete, userId, nextStep } = await signUp({
-        username: email,
-        password,
-        options: {
-          userAttributes: {
-            email,
-            given_name: firstName,
-            family_name: lastName,
-          },
-        },
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, firstName, lastName }),
       });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to sign up");
 
-      // Check if email confirmation is needed
-      if (nextStep?.signUpStep === "CONFIRM_SIGN_UP") {
-        setSignUpStep("confirm");
-      } else if (isSignUpComplete) {
-        // Auto-confirmed, redirect to sign in
+      if (data.confirmed) {
         router.push("/signin");
+      } else {
+        setSignUpStep("confirm");
       }
     } catch (err: any) {
       setError(err.message || "Failed to sign up");
@@ -66,11 +59,13 @@ export default function SignUpForm() {
     setLoading(true);
 
     try {
-      await confirmSignUp({
-        username: email,
-        confirmationCode,
+      const res = await fetch("/api/auth/confirm-signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, code: confirmationCode }),
       });
-      // After confirmation, redirect to sign in
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error ?? "Failed to confirm email");
       router.push("/signin");
     } catch (err: any) {
       setError(err.message || "Failed to confirm email");
