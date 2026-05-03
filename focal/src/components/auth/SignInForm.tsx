@@ -8,9 +8,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import {apiFetch } from "@/lib/auth-client";
+import { useProfile } from "@/hooks/useProfile";
 
 export default function SignInForm() {
   const router = useRouter();
+  const { refetch } = useProfile();
   const [showPassword, setShowPassword] = useState(false);
   const [isChecked, setIsChecked] = useState(false);
   const [password, setPassword] = useState("");
@@ -37,6 +39,7 @@ async function handleSignin(e: React.FormEvent) {
       throw new Error(data.error ?? "Failed to sign in");
     }
 
+    await refetch();
     router.push('/');
   } catch (err: any) {
     setError(err.message || 'Failed to sign in. Please check your credentials.');

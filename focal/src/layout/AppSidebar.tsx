@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
   GridIcon,
-  GroupIcon,
   HorizontaLDots,
   UserIcon,
 } from "../icons/index";
@@ -19,14 +18,9 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: <GroupIcon />,
-    name: "Groups",
-    path: "/",
-  },
-  {
     icon: <GridIcon />,
     name: "Dashboard",
-    path: "/groups",
+    path: "/",
   },
   {
     icon: <UserIcon />,

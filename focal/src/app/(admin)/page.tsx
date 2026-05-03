@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
-import GroupsDashboard from "@/components/classroom/GroupsDashboard";
+import TabbedDashboard from "@/components/classroom/TabbedDashboard";
 
 export const metadata: Metadata = {
-  title: "Focal — Groups",
-  description: "Manage devices by group within your organization.",
+  title: "Focal — Organization Dashboard",
+  description: "Manage your organization session, device blocks, and attendance.",
 };
 
-export default function GroupsPage() {
-  return <GroupsDashboard />;
+export default function DashboardPage() {
+  return <TabbedDashboard />;
 }
