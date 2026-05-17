@@ -2,8 +2,8 @@
 
 const COGNITO_DOMAIN = "focal-auth-portal.auth.us-east-2.amazoncognito.com";
 const CLIENT_ID = "2qnnauihtehjeifiif9a1qqjmn";
-const CALLBACK_URL = "https://main.deu6lm3uucumx.amplifyapp.com/api/auth/callback";
-const LOGOUT_URI = "https://main.deu6lm3uucumx.amplifyapp.com/signin";
+const CALLBACK_URL = "https://dashboard.focaltech.site/api/auth/callback";
+const LOGOUT_URI = "https://dashboard.focaltech.site/signin";
 
 
 export async function signOut() {
