@@ -81,45 +81,43 @@ const AppSidebar: React.FC = () => {
       onMouseLeave={() => setIsHovered(false)}
     >
       <div
-        className={`py-8 flex ${
-          !isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
-        }`}
+        className="py-8 flex justify-start pl-4"
       >
         <Link href="/">
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <Image
                 className="dark:hidden"
-                src="/images/logo/focal.svg"
+                src="/images/logo/focal.png"
                 alt="Logo"
-                width={150}
-                height={40}
+                width={90}
+                height={24}
               />
               <Image
                 className="hidden dark:block"
-                src="/images/logo/focal-dark.svg"
+                src="/images/logo/focal-dark.png"
                 alt="Logo"
-                width={150}
-                height={40}
+                width={90}
+                height={24}
               />
             </>
           ) : (
             <>
               <Image
                 className="dark:hidden"
-                src="/images/logo/focal.svg"
+                src="/images/logo/focal.png"
                 alt="Logo"
-                width={40}
-                height={40}
-                style={{ objectFit: "contain", maxWidth: "40px" }}
+                width={20}
+                height={20}
+                style={{ objectFit: "contain", maxWidth: "20px" }}
               />
               <Image
                 className="hidden dark:block"
-                src="/images/logo/focal-dark.svg"
+                src="/images/logo/focal-dark.png"
                 alt="Logo"
-                width={40}
-                height={40}
-                style={{ objectFit: "contain", maxWidth: "40px" }}
+                width={20}
+                height={20}
+                style={{ objectFit: "contain", maxWidth: "20px" }}
               />
             </>
           )}
