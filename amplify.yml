@@ -9,6 +9,7 @@ applications:
             - npm install --ignore-scripts=false
         build:
           commands:
+            - env
             - npm run build
       artifacts:
         baseDirectory: .next

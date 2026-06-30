@@ -2,9 +2,9 @@ import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { cookies } from "next/headers";
 
 const verifier = CognitoJwtVerifier.create({
-  userPoolId: "us-east-2_enXp5KADX",
+  userPoolId: process.env.COGNITO_USER_POOL_ID!,
   tokenUse: "access",
-  clientId: "2qnnauihtehjeifiif9a1qqjmn",
+  clientId: process.env.COGNITO_CLIENT_ID!,
 });
 
 export async function getAuthUser() {

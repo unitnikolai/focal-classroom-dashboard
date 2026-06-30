@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-const LAMBDA_URL = "https://4acmiz12d4.execute-api.us-east-2.amazonaws.com";
+const LAMBDA_URL = process.env.LAMBDA_URL!;
 
 export async function GET(req: NextRequest) {
   const next = req.nextUrl.searchParams.get('next') ?? '/';

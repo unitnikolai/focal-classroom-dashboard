@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { CognitoJwtVerifier } from 'aws-jwt-verify';
 
 
-const COGNITO_CLIENT_ID = "2qnnauihtehjeifiif9a1qqjmn";
-const COGNITO_USER_POOL_ID = "us-east-2_enXp5KADX"
+const COGNITO_CLIENT_ID = process.env.COGNITO_CLIENT_ID!;
+const COGNITO_USER_POOL_ID = process.env.COGNITO_USER_POOL_ID!
 
 const verifier = CognitoJwtVerifier.create({
   userPoolId: COGNITO_USER_POOL_ID,

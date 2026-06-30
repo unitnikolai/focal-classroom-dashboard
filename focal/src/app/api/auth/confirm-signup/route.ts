@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const COGNITO_ENDPOINT = "https://cognito-idp.us-east-2.amazonaws.com/";
-const CLIENT_ID = "2qnnauihtehjeifiif9a1qqjmn";
+const COGNITO_ENDPOINT = process.env.COGNITO_ENDPOINT!;
+const CLIENT_ID = process.env.COGNITO_CLIENT_ID!;
 
 export async function POST(req: NextRequest) {
   let body: { email?: string; code?: string };

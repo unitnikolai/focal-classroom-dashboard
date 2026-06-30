@@ -1,9 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-// Cognito Hosted UI config (mirrors the constants in src/lib/auth-client.ts).
-const COGNITO_DOMAIN = 'focal-auth-portal.auth.us-east-2.amazoncognito.com';
-const CLIENT_ID = '2qnnauihtehjeifiif9a1qqjmn';
-const REDIRECT_URI = 'https://dashboard.focaltech.site/api/auth/callback';
+const COGNITO_DOMAIN = process.env.COGNITO_DOMAIN!;
+const CLIENT_ID = process.env.COGNITO_CLIENT_ID!;
+const REDIRECT_URI = process.env.CALLBACK_URL!;
 
 // Initiates the OAuth Authorization Code flow. Generates a one-time `state`,
 // stores it in an HttpOnly cookie, and redirects the browser to Cognito with the
