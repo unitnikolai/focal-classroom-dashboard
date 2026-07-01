@@ -9,7 +9,7 @@ applications:
             - npm install --ignore-scripts=false
         build:
           commands:
-            - env
+            - env | grep -e NEXT_PUBLIC_ -e LAMBDA_URL -e COGNITO_ -e CALLBACK_URL -e LOGOUT_URI >> .env.production
             - npm run build
       artifacts:
         baseDirectory: .next
