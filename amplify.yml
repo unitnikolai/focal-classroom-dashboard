@@ -11,11 +11,8 @@ applications:
           commands:
             - env
             - npm run build
-            - cp -r public .next/standalone/
-            - mkdir -p .next/standalone/.next
-            - cp -r .next/static .next/standalone/.next/static
       artifacts:
-        baseDirectory: .next/standalone
+        baseDirectory: .next
         files:
           - '**/*'
       cache:
