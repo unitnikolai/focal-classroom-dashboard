@@ -7,6 +7,7 @@ import { useSidebar } from "../context/SidebarContext";
 import {
   GridIcon,
   HorizontaLDots,
+  PieChartIcon,
   UserIcon,
 } from "../icons/index";
 
@@ -26,6 +27,11 @@ const navItems: NavItem[] = [
     icon: <UserIcon />,
     name: "Profile",
     path: "/profile",
+  },
+  {
+    icon: <PieChartIcon />,
+    name: "Reports",
+    path: "/reports",
   },
 ];
 

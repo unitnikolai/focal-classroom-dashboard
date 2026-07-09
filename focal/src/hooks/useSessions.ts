@@ -34,6 +34,7 @@ function mapSessionToStudent(session: RawSession): Student {
 
   return {
     id: session.session_id,
+    userId: session.user_id,
     name: session.full_name || session.user_id,
     deviceName: session.device_name ?? "Unknown device",
     deviceStatus,

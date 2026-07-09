@@ -1,13 +1,13 @@
 "use client";
 import React, { useState, useCallback, useMemo } from "react";
 import { Student } from "./types";
-import { useSessions } from "@/hooks/useSessions";
+import { useSessionsContext } from "@/context/SessionsContext";
 import DeviceList from "./DeviceList";
 import StatCards from "./StatCards";
 
 export default function TabbedDashboard() {
   const [activeTab, setActiveTab] = useState<string>("all");
-  const { sessions, loading, error } = useSessions(5000);
+  const { sessions, loading, error } = useSessionsContext();
   const [students, setStudents] = useState<Student[]>([]);
 
   React.useEffect(() => {

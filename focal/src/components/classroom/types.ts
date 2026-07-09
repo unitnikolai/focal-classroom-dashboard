@@ -11,6 +11,7 @@ export interface StudentExemption {
 
 export interface Student {
   id: string;
+  userId?: string;
   name: string;
   deviceName: string;
   deviceStatus: DeviceStatus;
