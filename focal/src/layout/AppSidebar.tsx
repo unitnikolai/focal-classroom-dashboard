@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
-  GridIcon,
+  PhoneIcon,
   HorizontaLDots,
   PieChartIcon,
   UserIcon,
@@ -19,19 +19,19 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   {
-    icon: <GridIcon />,
-    name: "Dashboard",
+    icon: <PhoneIcon />,
+    name: "Devices",
     path: "/",
-  },
-  {
-    icon: <UserIcon />,
-    name: "Profile",
-    path: "/profile",
   },
   {
     icon: <PieChartIcon />,
     name: "Reports",
     path: "/reports",
+  },
+  {
+    icon: <UserIcon />,
+    name: "Profile",
+    path: "/profile",
   },
 ];
 

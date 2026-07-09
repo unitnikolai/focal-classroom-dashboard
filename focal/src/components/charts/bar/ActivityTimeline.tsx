@@ -18,7 +18,7 @@ interface ActivityTimelineProps {
 }
 
 const ACTIVE_COLOR = "#12b76a";
-const INACTIVE_COLOR = "#f04438";
+const INACTIVE_COLOR = "#fdb022";
 const NO_DATA_COLOR = "#e4e7ec";
 const ROW_HEIGHT = 56;
 const MAIN_CHART_ID = "activity-timeline-main";

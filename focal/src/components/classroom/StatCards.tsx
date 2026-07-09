@@ -11,8 +11,6 @@ export default function StatCards({ students }: StatCardsProps) {
   const activeDevices = students.filter(
     (s) => s.deviceStatus === "active" && !s.exemption
   ).length;
-  const exempted = students.filter((s) => !!s.exemption).length;
-  const unactivated = students.filter((s) => s.deviceStatus === "unactivated").length;
 
   const stats = [
     {
@@ -29,24 +27,10 @@ export default function StatCards({ students }: StatCardsProps) {
       dotColor: "bg-success-500",
       textColor: "text-success-600 dark:text-success-400",
     },
-    {
-      label: "Exempted",
-      value: exempted,
-      sub: "partial unblock",
-      dotColor: "bg-brand-500",
-      textColor: "text-brand-500 dark:text-brand-400",
-    },
-    {
-      label: "Unactivated",
-      value: unactivated,
-      sub: "app not set up",
-      dotColor: "bg-gray-400",
-      textColor: "text-gray-500 dark:text-gray-400",
-    },
   ];
 
   return (
-    <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 md:gap-6">
+    <div className="grid grid-cols-2 gap-4 md:gap-6">
       {stats.map((stat) => (
         <div
           key={stat.label}
