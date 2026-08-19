@@ -8,7 +8,10 @@ import StatCards from "./StatCards";
 export default function TabbedDashboard() {
   const [activeTab, setActiveTab] = useState<string>("all");
   const { sessions, loading, error } = useSessionsContext();
-  const [students, setStudents] = useState<Student[]>([]);
+  // Seeded from context (not []) so remounting this page — e.g. navigating to
+  // Reports and back — shows the already-loaded session data immediately
+  // instead of flashing empty for a render while the sync effect below runs.
+  const [students, setStudents] = useState<Student[]>(sessions);
 
   React.useEffect(() => {
     setStudents(sessions);

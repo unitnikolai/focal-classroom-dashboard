@@ -1,16 +1,24 @@
 "use client";
 import React, { useCallback, useEffect, useState } from "react";
 import { apiFetch } from "@/lib/auth-client";
-import { AdminUser, AdminOrganization } from "@/types/admin";
+import { AdminUser, AdminOrganization, AdminGroup } from "@/types/admin";
 import UsersPanel from "./UsersPanel";
 import OrganizationsPanel from "./OrganizationsPanel";
+import GroupsPanel from "./GroupsPanel";
 
-type Tab = "users" | "organizations";
+type Tab = "users" | "organizations" | "groups";
+
+const TAB_LABELS: Record<Tab, string> = {
+  users: "Users",
+  organizations: "Organizations",
+  groups: "Groups",
+};
 
 export default function AdminPanel() {
   const [tab, setTab] = useState<Tab>("users");
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [organizations, setOrganizations] = useState<AdminOrganization[]>([]);
+  const [groups, setGroups] = useState<AdminGroup[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,17 +26,20 @@ export default function AdminPanel() {
     setLoading(true);
     setError(null);
     try {
-      const [usersRes, orgsRes] = await Promise.all([
+      const [usersRes, orgsRes, groupsRes] = await Promise.all([
         apiFetch("/api/admin/users"),
         apiFetch("/api/admin/organizations"),
+        apiFetch("/api/admin/groups"),
       ]);
-      if (!usersRes.ok || !orgsRes.ok) {
+      if (!usersRes.ok || !orgsRes.ok || !groupsRes.ok) {
         throw new Error("Failed to load admin data");
       }
       const usersData = await usersRes.json();
       const orgsData = await orgsRes.json();
+      const groupsData = await groupsRes.json();
       setUsers(usersData.users ?? []);
       setOrganizations(orgsData.organizations ?? []);
+      setGroups(groupsData.groups ?? []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to load admin data");
     } finally {
@@ -44,11 +55,11 @@ export default function AdminPanel() {
     <div>
       <h1 className="mb-1 text-2xl font-semibold text-gray-800 dark:text-white/90">Admin panel</h1>
       <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-        Manage users, organization membership, and admin delegation.
+        Manage users, organizations, groups, and admin delegation.
       </p>
 
       <div className="mb-6 flex items-center gap-2 border-b border-gray-200 dark:border-gray-800">
-        {(["users", "organizations"] as Tab[]).map((t) => (
+        {(Object.keys(TAB_LABELS) as Tab[]).map((t) => (
           <button
             key={t}
             onClick={() => setTab(t)}
@@ -58,7 +69,7 @@ export default function AdminPanel() {
                 : "border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
             }`}
           >
-            {t === "users" ? "Users" : "Organizations"}
+            {TAB_LABELS[t]}
           </button>
         ))}
       </div>
@@ -75,8 +86,10 @@ export default function AdminPanel() {
         </div>
       ) : tab === "users" ? (
         <UsersPanel users={users} organizations={organizations} onChanged={fetchAll} />
-      ) : (
+      ) : tab === "organizations" ? (
         <OrganizationsPanel organizations={organizations} onChanged={fetchAll} />
+      ) : (
+        <GroupsPanel groups={groups} organizations={organizations} users={users} onChanged={fetchAll} />
       )}
     </div>
   );
