@@ -59,7 +59,7 @@ export default function TabbedDashboard() {
 
       {/* Tab bar */}
       <div className="border-b border-gray-200 dark:border-gray-800">
-        <nav className="-mb-px flex gap-6 overflow-x-auto">
+        <nav className="-mb-px flex gap-4 overflow-x-auto sm:gap-6">
           <button
             onClick={() => setActiveTab("all")}
             className={`whitespace-nowrap border-b-2 pb-3 text-sm font-medium transition-colors ${

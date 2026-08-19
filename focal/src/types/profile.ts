@@ -9,6 +9,8 @@ export interface BackendUserProfile {
   given_name: string;
   family_name: string;
   organization_id: string;
+  admin_status: boolean;
+  focal_admin: boolean;
 }
 
 export interface PersonalInfo {
@@ -21,6 +23,8 @@ export interface PersonalInfo {
 export interface UserProfile {
   id: string;
   personalInfo: PersonalInfo;
+  adminStatus: boolean;
+  focalAdmin: boolean;
 }
 
 export type ProfileApiResponse = {

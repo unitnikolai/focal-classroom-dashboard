@@ -47,6 +47,8 @@ export async function GET(req: NextRequest) {
         email: backendData.email ?? '',
         organizationId: backendData.organization_id ?? '',
       },
+      adminStatus: backendData.admin_status ?? false,
+      focalAdmin: backendData.focal_admin ?? false,
     };
 
     return NextResponse.json({ success: true, data: profileData } satisfies ProfileApiResponse);

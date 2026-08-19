@@ -4,11 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
+import { useProfileContext } from "../context/ProfileContext";
 import {
   PhoneIcon,
   HorizontaLDots,
   PieChartIcon,
   UserIcon,
+  LockIcon,
 } from "../icons/index";
 
 type NavItem = {
@@ -35,11 +37,20 @@ const navItems: NavItem[] = [
   },
 ];
 
+const adminNavItem: NavItem = {
+  icon: <LockIcon />,
+  name: "Admin Panel",
+  path: "/admin",
+};
+
 const AppSidebar: React.FC = () => {
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { profile } = useProfileContext();
   const pathname = usePathname();
 
   const isActive = useCallback((path: string) => path === pathname, [pathname]);
+
+  const visibleNavItems = profile?.focalAdmin ? [...navItems, adminNavItem] : navItems;
 
   const renderMenuItems = (items: NavItem[]) => (
     <ul className="flex flex-col gap-4">
@@ -147,7 +158,7 @@ const AppSidebar: React.FC = () => {
                   <HorizontaLDots />
                 )}
               </h2>
-              {renderMenuItems(navItems)}
+              {renderMenuItems(visibleNavItems)}
             </div>
           </div>
         </nav>

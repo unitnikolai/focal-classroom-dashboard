@@ -41,7 +41,7 @@ function StatusLabel({ status, statusSince }: { status: Student["deviceStatus"];
       : status === "inactive"
       ? "text-warning-600 dark:text-orange-400"
       : "text-gray-400 dark:text-gray-500";
-  return <span className={`text-sm ${textColor}`}>{label}</span>;
+  return <span className={`text-xs sm:text-sm ${textColor}`}>{label}</span>;
 }
 
 export default function DeviceList({ students, onUnblock }: DeviceListProps) {
@@ -163,7 +163,7 @@ export default function DeviceList({ students, onUnblock }: DeviceListProps) {
           </div>
 
           {/* Bulk actions */}
-          <div className="mt-4 flex items-center justify-between">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-y-2">
             <label className="flex items-center gap-2 cursor-pointer select-none">
               <input
                 type="checkbox"
@@ -179,14 +179,14 @@ export default function DeviceList({ students, onUnblock }: DeviceListProps) {
               <button
                 onClick={handleUnblockSelected}
                 disabled={selectedActiveIds.length === 0}
-                className="rounded-lg border border-gray-200 px-3 py-1.5 text-sm font-medium text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/[0.03]"
+                className="rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:px-3 sm:text-sm"
               >
                 Unblock selected
               </button>
               <button
                 onClick={handleUnblockAll}
                 disabled={activeIds.size === 0}
-                className="rounded-lg border border-warning-200 px-3 py-1.5 text-sm font-medium text-warning-600 transition hover:bg-warning-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-warning-500/30 dark:text-orange-400 dark:hover:bg-warning-500/10"
+                className="rounded-lg border border-warning-200 px-2.5 py-1.5 text-xs font-medium text-warning-600 transition hover:bg-warning-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-warning-500/30 dark:text-orange-400 dark:hover:bg-warning-500/10 sm:px-3 sm:text-sm"
               >
                 Unblock all
               </button>
@@ -199,7 +199,7 @@ export default function DeviceList({ students, onUnblock }: DeviceListProps) {
           {filtered.map((student) => (
             <div
               key={student.id}
-              className="flex items-center gap-4 px-5 py-3.5 transition-colors hover:bg-gray-50 dark:hover:bg-white/[0.02] md:px-6"
+              className="flex flex-wrap items-center gap-x-3 gap-y-1.5 px-4 py-3.5 transition-colors hover:bg-gray-50 dark:hover:bg-white/[0.02] sm:flex-nowrap sm:gap-4 sm:px-5 md:px-6"
             >
               {/* Checkbox */}
               <input
@@ -209,10 +209,13 @@ export default function DeviceList({ students, onUnblock }: DeviceListProps) {
                 className="h-4 w-4 flex-shrink-0 rounded border-gray-300 text-brand-500 focus:ring-brand-500 dark:border-gray-600 dark:bg-gray-800"
               />
 
-              {/* Name */}
-              <div className="min-w-0 flex-1">
+              {/* Name (+ device name on mobile) */}
+              <div className="min-w-[120px] flex-1">
                 <p className="truncate text-sm font-medium text-gray-800 dark:text-white/90">
                   {student.name}
+                </p>
+                <p className="truncate text-xs text-gray-400 dark:text-gray-500 sm:hidden">
+                  {student.deviceName}
                 </p>
               </div>
 
@@ -223,59 +226,62 @@ export default function DeviceList({ students, onUnblock }: DeviceListProps) {
                 </p>
               </div>
 
-              {/* Status */}
-              <div className="flex items-center gap-1.5 min-w-[90px]">
-                <StatusDot status={student.deviceStatus} />
-                <StatusLabel status={student.deviceStatus} statusSince={student.statusSince} />
-              </div>
+              {/* Status + Action: wraps as a pair onto their own row when space is tight */}
+              <div className="flex w-full items-center justify-between gap-2 pl-7 sm:w-auto sm:contents sm:pl-0">
+                {/* Status */}
+                <div className="flex items-center gap-1.5 sm:min-w-[90px]">
+                  <StatusDot status={student.deviceStatus} />
+                  <StatusLabel status={student.deviceStatus} statusSince={student.statusSince} />
+                </div>
 
-              {/* Action */}
-              <div className="w-20 flex justify-end relative">
-                {student.deviceStatus === "active" ? (
-                  <button
-                    onClick={() => onUnblock([student.id])}
-                    className="rounded-lg border border-gray-200 px-3 py-1 text-xs font-medium text-gray-600 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/[0.03]"
-                  >
-                    Unblock
-                  </button>
-                ) : (
-                  <div className="relative">
+                {/* Action */}
+                <div className="flex justify-end relative sm:w-20">
+                  {student.deviceStatus === "active" ? (
                     <button
-                      onClick={() =>
-                        setMenuOpenId(menuOpenId === student.id ? null : student.id)
-                      }
-                      className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 dark:hover:bg-white/[0.05]"
+                      onClick={() => onUnblock([student.id])}
+                      className="rounded-lg border border-gray-200 px-2 py-1 text-xs font-medium text-gray-600 transition hover:bg-gray-50 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-white/[0.03] sm:px-3"
                     >
-                      <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
-                        <circle cx="10" cy="4" r="1.5" />
-                        <circle cx="10" cy="10" r="1.5" />
-                        <circle cx="10" cy="16" r="1.5" />
-                      </svg>
+                      Unblock
                     </button>
-                    {menuOpenId === student.id && (
-                      <>
-                        <div
-                          className="fixed inset-0 z-10"
-                          onClick={() => setMenuOpenId(null)}
-                        />
-                        <div className="absolute right-0 top-9 z-20 w-36 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                          <button
+                  ) : (
+                    <div className="relative">
+                      <button
+                        onClick={() =>
+                          setMenuOpenId(menuOpenId === student.id ? null : student.id)
+                        }
+                        className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition hover:bg-gray-100 dark:hover:bg-white/[0.05]"
+                      >
+                        <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 20 20">
+                          <circle cx="10" cy="4" r="1.5" />
+                          <circle cx="10" cy="10" r="1.5" />
+                          <circle cx="10" cy="16" r="1.5" />
+                        </svg>
+                      </button>
+                      {menuOpenId === student.id && (
+                        <>
+                          <div
+                            className="fixed inset-0 z-10"
                             onClick={() => setMenuOpenId(null)}
-                            className="w-full px-3 py-2 text-left text-sm text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/[0.03]"
-                          >
-                            View details
-                          </button>
-                          <button
-                            onClick={() => setMenuOpenId(null)}
-                            className="w-full px-3 py-2 text-left text-sm text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/[0.03]"
-                          >
-                            Remove device
-                          </button>
-                        </div>
-                      </>
-                    )}
-                  </div>
-                )}
+                          />
+                          <div className="absolute right-0 top-9 z-20 w-36 rounded-lg border border-gray-200 bg-white py-1 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                            <button
+                              onClick={() => setMenuOpenId(null)}
+                              className="w-full px-3 py-2 text-left text-sm text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/[0.03]"
+                            >
+                              View details
+                            </button>
+                            <button
+                              onClick={() => setMenuOpenId(null)}
+                              className="w-full px-3 py-2 text-left text-sm text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-white/[0.03]"
+                            >
+                              Remove device
+                            </button>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           ))}
