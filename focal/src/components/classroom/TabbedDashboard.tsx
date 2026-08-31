@@ -2,12 +2,14 @@
 import React, { useState, useCallback, useMemo } from "react";
 import { Student } from "./types";
 import { useSessionsContext } from "@/context/SessionsContext";
+import { useGroups } from "@/hooks/useGroups";
 import DeviceList from "./DeviceList";
 import StatCards from "./StatCards";
 
 export default function TabbedDashboard() {
   const [activeTab, setActiveTab] = useState<string>("all");
   const { sessions, loading, error } = useSessionsContext();
+  const { groupNames } = useGroups();
   // Seeded from context (not []) so remounting this page — e.g. navigating to
   // Reports and back — shows the already-loaded session data immediately
   // instead of flashing empty for a render while the sync effect below runs.
@@ -43,8 +45,11 @@ export default function TabbedDashboard() {
     );
   }, []);
 
-  // Truncate group IDs for display (first 8 chars)
+  // Prefer the real group name; fall back to a truncated ID if the name
+  // hasn't loaded yet (or the group was since deleted).
   function groupLabel(groupId: string): string {
+    const name = groupNames.get(groupId);
+    if (name) return name;
     return groupId.length > 12 ? groupId.slice(0, 8) + "…" : groupId;
   }
 

@@ -60,3 +60,46 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
+/**
+ * PATCH /api/profile
+ * Updates the caller's own given_name/family_name. No other fields are accepted.
+ */
+export async function PATCH(req: NextRequest) {
+  try {
+    const cookieHeader = req.headers.get('cookie');
+    const payload = await verifyAuthCookie(cookieHeader);
+
+    if (!payload) {
+      return NextResponse.json({ success: false, error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { given_name, family_name } = await req.json().catch(() => ({}));
+    if (typeof given_name !== 'string' || typeof family_name !== 'string') {
+      return NextResponse.json(
+        { success: false, error: 'given_name and family_name are required' },
+        { status: 400 }
+      );
+    }
+
+    const backendRes = await fetch(`${LAMBDA_URL}/api/profile`, {
+      method: 'PATCH',
+      headers: {
+        cookie: cookieHeader ?? '',
+        'content-type': 'application/json',
+        'x-csrf-token': req.headers.get('x-csrf-token') ?? '',
+      },
+      body: JSON.stringify({ given_name, family_name }),
+    });
+
+    const body = await backendRes.json().catch(() => ({}));
+    if (!backendRes.ok) {
+      return NextResponse.json({ success: false, error: body.error ?? 'Backend error' }, { status: backendRes.status });
+    }
+
+    return NextResponse.json({ success: true, data: body });
+  } catch (error) {
+    console.error('Profile update error:', error);
+    return NextResponse.json({ success: false, error: 'Internal Server Error' }, { status: 500 });
+  }
+}

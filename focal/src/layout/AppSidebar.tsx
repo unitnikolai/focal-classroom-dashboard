@@ -104,37 +104,35 @@ const AppSidebar: React.FC = () => {
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <Image
-                className="dark:hidden"
+                className="h-9 w-auto dark:hidden"
                 src="/images/logo/focal.png"
-                alt="Logo"
-                width={90}
-                height={24}
+                alt="Focal"
+                width={1204}
+                height={1258}
               />
               <Image
-                className="hidden dark:block"
+                className="hidden h-9 w-auto dark:block"
                 src="/images/logo/focal-dark.png"
-                alt="Logo"
-                width={90}
-                height={24}
+                alt="Focal"
+                width={1204}
+                height={1258}
               />
             </>
           ) : (
             <>
               <Image
-                className="dark:hidden"
+                className="h-8 w-auto dark:hidden"
                 src="/images/logo/focal.png"
-                alt="Logo"
-                width={20}
-                height={20}
-                style={{ objectFit: "contain", maxWidth: "20px" }}
+                alt="Focal"
+                width={1204}
+                height={1258}
               />
               <Image
-                className="hidden dark:block"
+                className="hidden h-8 w-auto dark:block"
                 src="/images/logo/focal-dark.png"
-                alt="Logo"
-                width={20}
-                height={20}
-                style={{ objectFit: "contain", maxWidth: "20px" }}
+                alt="Focal"
+                width={1204}
+                height={1258}
               />
             </>
           )}
