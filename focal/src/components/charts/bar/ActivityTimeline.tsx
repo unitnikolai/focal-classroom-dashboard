@@ -10,12 +10,28 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
+// "casual" — friendly 12-hour clock with am/pm (e.g. 3:45 PM)
+// "standard" — 24-hour clock (e.g. 15:45)
+export type TimeFormat = "casual" | "standard";
+
 interface ActivityTimelineProps {
   users: { userId: string; name: string }[];
   segments: ActivitySegment[];
   rangeStart: Date;
   rangeEnd: Date;
+  timeFormat: TimeFormat;
 }
+
+// ApexCharts datetime tokens differ per clock style: `h:mm TT` -> 3:45 PM,
+// `HH:mm` -> 15:45.
+const AXIS_FORMAT: Record<TimeFormat, string> = {
+  casual: "h:mm TT",
+  standard: "HH:mm",
+};
+const TOOLTIP_FORMAT: Record<TimeFormat, string> = {
+  casual: "MMM d, h:mm TT",
+  standard: "MMM d, HH:mm",
+};
 
 const ACTIVE_COLOR = "#12b76a";
 const INACTIVE_COLOR = "#fdb022";
@@ -36,7 +52,7 @@ function rangesEqual(a: ViewRange, b: ViewRange) {
   return Math.abs(a.min - b.min) < RANGE_EPSILON_MS && Math.abs(a.max - b.max) < RANGE_EPSILON_MS;
 }
 
-export default function ActivityTimeline({ users, segments, rangeStart, rangeEnd }: ActivityTimelineProps) {
+export default function ActivityTimeline({ users, segments, rangeStart, rangeEnd, timeFormat }: ActivityTimelineProps) {
   const rangeStartMs = rangeStart.getTime();
   const rangeEndMs = rangeEnd.getTime();
 
@@ -122,7 +138,7 @@ export default function ActivityTimeline({ users, segments, rangeStart, rangeEnd
       max: viewRange.max,
       labels: {
         datetimeUTC: false,
-        format: "HH:mm",
+        format: AXIS_FORMAT[timeFormat],
       },
       axisBorder: { show: false },
       axisTicks: { show: false },
@@ -137,7 +153,7 @@ export default function ActivityTimeline({ users, segments, rangeStart, rangeEnd
     },
     tooltip: {
       x: {
-        format: "MMM d, HH:mm",
+        format: TOOLTIP_FORMAT[timeFormat],
       },
     },
     legend: {

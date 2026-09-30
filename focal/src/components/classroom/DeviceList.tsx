@@ -229,9 +229,23 @@ export default function DeviceList({ students, onUnblock }: DeviceListProps) {
               {/* Status + Action: wraps as a pair onto their own row when space is tight */}
               <div className="flex w-full items-center justify-between gap-2 pl-7 sm:w-auto sm:contents sm:pl-0">
                 {/* Status */}
-                <div className="flex items-center gap-1.5 sm:min-w-[90px]">
-                  <StatusDot status={student.deviceStatus} />
-                  <StatusLabel status={student.deviceStatus} statusSince={student.statusSince} />
+                <div className="flex flex-col items-start gap-0.5 sm:min-w-[90px]">
+                  <div className="flex items-center gap-1.5">
+                    <StatusDot status={student.deviceStatus} />
+                    <StatusLabel status={student.deviceStatus} statusSince={student.statusSince} />
+                  </div>
+                  {student.deviceStatus === "inactive" && student.unblockSource && (
+                    <span
+                      className="text-[11px] text-gray-400 dark:text-gray-500"
+                      title={student.unblockedBy ? `Unblocked by ${student.unblockedBy}` : undefined}
+                    >
+                      {student.unblockSource === "remote"
+                        ? "Released remotely"
+                        : student.unblockSource === "tap"
+                        ? "Released via tap"
+                        : null}
+                    </span>
+                  )}
                 </div>
 
                 {/* Action */}

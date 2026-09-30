@@ -20,6 +20,11 @@ export interface Student {
   exemption?: StudentExemption;
   statusSince?: string;
   groupId?: string;
+  // How the device was last released ("tap" = student scanned a Focal Point,
+  // "remote" = an admin broke them out), and, for a remote unblock, the admin
+  // who issued it. Only set while the device is inactive.
+  unblockSource?: string;
+  unblockedBy?: string;
 }
 
 export type DeviceFilter = "all" | "active" | "exempted" | "inactive" | "unactivated";

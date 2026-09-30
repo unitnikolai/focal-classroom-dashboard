@@ -15,6 +15,8 @@ interface RawSession {
   status: string;
   status_since: string;
   ttl: number;
+  unblock_source?: string | null;
+  unblocked_by?: string | null;
 }
 
 function mapSessionToStudent(session: RawSession): Student {
@@ -42,6 +44,8 @@ function mapSessionToStudent(session: RawSession): Student {
     joinTime,
     statusSince: session.status_since,
     groupId: session.group_id || undefined,
+    unblockSource: session.unblock_source ?? undefined,
+    unblockedBy: session.unblocked_by ?? undefined,
   };
 }
 
@@ -57,6 +61,8 @@ const ON_SESSION_UPDATED = `subscription OnSessionUpdated($org_id: String!) {
     status
     status_since
     ttl
+    unblock_source
+    unblocked_by
   }
 }`;
 

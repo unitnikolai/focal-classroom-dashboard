@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { forwardSetCookies } from '@/lib/cookies';
 
 const LAMBDA_URL = process.env.LAMBDA_URL!;
 
@@ -44,9 +45,7 @@ export async function GET(req: NextRequest) {
   const res = NextResponse.redirect(new URL('/dashboard', req.url));
   res.cookies.delete('oauth_state');
 
-  lambdaRes.headers.getSetCookie().forEach(cookie => {
-    res.headers.append("Set-Cookie", cookie);
-  });
+  forwardSetCookies(res, lambdaRes.headers.getSetCookie());
 
   return res;
 }

@@ -7,23 +7,13 @@ interface StatCardsProps {
 }
 
 export default function StatCards({ students }: StatCardsProps) {
-  const present = students.filter((s) => s.attendanceStatus !== "absent").length;
-  const activeDevices = students.filter(
-    (s) => s.deviceStatus === "active" && !s.exemption
-  ).length;
+  const active = students.filter((s) => s.deviceStatus === "active").length;
 
   const stats = [
     {
       label: "Present",
-      value: present,
-      sub: `of ${students.length} employees`,
-      dotColor: "bg-success-500",
-      textColor: "text-success-600 dark:text-success-400",
-    },
-    {
-      label: "Devices active",
-      value: activeDevices,
-      sub: "block enforced",
+      value: active,
+      sub: `of ${students.length} users`,
       dotColor: "bg-success-500",
       textColor: "text-success-600 dark:text-success-400",
     },
