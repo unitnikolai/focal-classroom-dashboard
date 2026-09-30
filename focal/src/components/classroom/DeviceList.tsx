@@ -52,7 +52,7 @@ export default function DeviceList({ students, onUnblock }: DeviceListProps) {
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
-    return students.filter((s) => {
+    const matches = students.filter((s) => {
       if (s.deviceStatus === "unactivated") return false;
       if (filterStatus !== "all" && s.deviceStatus !== filterStatus) return false;
       if (search) {
@@ -63,6 +63,18 @@ export default function DeviceList({ students, onUnblock }: DeviceListProps) {
         );
       }
       return true;
+    });
+    // Active devices first, then most-recently-changed first. Without an explicit
+    // sort the list renders in get-sessions order (org-index, status_since
+    // ascending), which pushes a just-activated device — whose status_since is
+    // bumped to now — to the very bottom. On a live board the devices currently
+    // blocked should be at the top. (.filter already returned a fresh array, so
+    // sorting in place here does not mutate the incoming students prop.)
+    return matches.sort((a, b) => {
+      const ra = a.deviceStatus === "active" ? 0 : 1;
+      const rb = b.deviceStatus === "active" ? 0 : 1;
+      if (ra !== rb) return ra - rb;
+      return (b.statusSince ?? "").localeCompare(a.statusSince ?? "");
     });
   }, [students, search, filterStatus]);
 
